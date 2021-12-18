@@ -1,12 +1,14 @@
 from datetime import datetime
 
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
 from app.ext import db
+from app.ext import login_manager
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True)
     first_name = db.Column(db.String)
@@ -30,3 +32,7 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
