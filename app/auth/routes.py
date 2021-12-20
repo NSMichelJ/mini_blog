@@ -10,18 +10,16 @@ from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
 
-from app.ext import db
 from .forms import LoginForm
 from .forms import SignupForm
+from .decorators import if_user_authenticated_redirect
 from .models import User
 
 bp = Blueprint('auth', __name__, template_folder='templates')
 
 @bp.route('/login', methods=['GET', 'POST'])
+@if_user_authenticated_redirect('dashboard.dashboard')
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('dashboard.dashboard'))
-
     form = LoginForm()
 
     if request.method == 'POST':
@@ -44,10 +42,8 @@ def login():
     return render_template('login.html', form=form)
 
 @bp.route('/signup', methods=['GET', 'POST'])
+@if_user_authenticated_redirect('dashboard.dashboard')
 def signup():
-    if current_user.is_authenticated:
-        return redirect(url_for('dashboard.dashboard'))
-
     form = SignupForm()
 
     if request.method == 'POST':
@@ -61,12 +57,12 @@ def signup():
 
             user.created_password(request.form['password'])
             user.save()
-            return redirect(url_for('public.index'))
+            return redirect(url_for('dashboard.dashboard'))
 
     return render_template('signup.html', form=form)
 
 @bp.route('/logout')
-@login_required
 def logout():
-    logout_user()
+    if current_user.is_authenticated:
+        logout_user()
     return redirect(url_for('public.index'))

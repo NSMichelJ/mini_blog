@@ -15,6 +15,7 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String)
     email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
+    admin = db.Column(db.Boolean, default=False)
     created = db.Column(db.DateTime, default=datetime.now())
     updated = db.Column(db.String, nullable=True)
 
@@ -37,6 +38,12 @@ class User(db.Model, UserMixin):
         if not self.id:
             db.session.add(self)
         db.session.commit()
+
+    def is_admin(self):
+        return self.admin
+    
+    def create_admin(self):
+        self.admin = True
 
 @login_manager.user_loader
 def load_user(id):
