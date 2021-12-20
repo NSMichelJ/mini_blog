@@ -1,0 +1,24 @@
+{% extends '_base.html' %}
+
+{% block title %}Write Post{% endblock%}
+
+{% block content %}
+<form method="post" autocomplete="off">
+    {{ form.csrf_token }}
+
+    {{ form.title.label }}
+    {{ form.title}}
+
+    {{ form.content.label }}
+    {{ form.content }}
+
+    {{ form.read_time.label }}
+    {{ form.read_time}}
+
+    <button>send</button>
+</form>
+
+{{ ckeditor.load() }}
+{{ ckeditor.config(name='content') }}
+
+{% endblock%}

@@ -9,6 +9,7 @@ from app.ext import db
 from app.ext import login_manager
 
 class User(db.Model, UserMixin):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True)
     first_name = db.Column(db.String)
@@ -16,6 +17,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
     admin = db.Column(db.Boolean, default=False)
+    posts = db.relationship('Post', backref='author', lazy=True, cascade="all, delete")
     created = db.Column(db.DateTime, default=datetime.now())
     updated = db.Column(db.String, nullable=True)
 

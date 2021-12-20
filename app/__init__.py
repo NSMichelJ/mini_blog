@@ -6,6 +6,7 @@ from app.admin.routes import bp as admin_bp
 from app.auth.routes import bp as auth_bp
 from app.dashboard.routes import bp as dash_bp
 from app.ext import *
+from app.post.routes import bp as post_bp
 from app.public.routes import bp as public_bp
 
 def create_app():
@@ -17,6 +18,7 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(dash_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(post_bp)
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -25,5 +27,6 @@ def create_app():
     login_manager.login_message = 'Por favor inicie sección'
     login_manager.login_message_category = 'info'
     csrf.init_app(app)
+    ckeditor.init_app(app)
 
     return app

@@ -4,4 +4,20 @@
 
 {% block content %}
 <h1>Dashboard</h1>
+
+My Post:
+<ul>
+    {% for post in current_user.posts %}
+    <li>
+        <a 
+        href="{{ url_for(
+            'post.show_post',
+            uuid=post.public_id,
+            slug=post.title_slug) }}">
+            {{ post.title }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
