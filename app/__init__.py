@@ -22,5 +22,6 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Por favor inicie sección'
     login_manager.login_message_category = 'info'
+    csrf.init_app(app)
 
     return app

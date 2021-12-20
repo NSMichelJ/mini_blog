@@ -33,6 +33,11 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+    def save(self):
+        if not self.id:
+            db.session.add(self)
+        db.session.commit()
+
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))

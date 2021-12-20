@@ -5,10 +5,16 @@
 {% block content %}
 
 <form method="post">
+    {{ form.csrf_token }}
 
-    <input type="text" name="username" id="">
-    <input type="password" name="password" id="">
+    {{ form.username.label }}
+    {{ form.username }}
 
+    {{ form.password.label }}
+    {{ form.password }}
+
+    {{ form.remember_me}}
+    {{ form.remember_me.label }}
     <button>send</button>
 </form>
 

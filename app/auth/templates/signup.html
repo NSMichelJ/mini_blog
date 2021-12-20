@@ -4,13 +4,35 @@
 
 {% block content %}
 
-<form method="post">
+<form method="post" autocomplete="off">
+    {% from '_form_error_helper.html' import render_field %}
 
-    <input type="text" name="username" id="">
-    <input type="text" name="last_name" id="">
-    <input type="text" name="first_name" id="">
-    <input type="email" name="email" id="">
-    <input type="password" name="password" id="">
+    {{ form.csrf_token }}
+
+    {{ form.username.label }}
+    {{ form.username }}
+    {{ render_field(form.username) }}
+
+    {{ form.first_name.label }}
+    {{ form.first_name }}
+    {{ render_field(form.first_name) }}
+
+    {{ form.last_name.label }}
+    {{ form.last_name }}
+    {{ render_field(form.last_name) }}
+
+    {{ form.email.label }}
+    {{ form.email }}
+    {{ render_field(form.email) }}
+
+    {{ form.password.label }}
+    {{ form.password }}
+    {{ render_field(form.password) }}
+
+    {{ form.confirm_password.label }}
+    {{ form.confirm_password }}
+    {{ render_field(form.confirm_password) }}
+
 
     <button>send</button>
 </form>
