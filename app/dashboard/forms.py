@@ -6,7 +6,7 @@ from wtforms import IntegerField
 from wtforms.validators import DataRequired
 from wtforms.validators import NumberRange
 
-class WritePost(FlaskForm):
+class WritePostForm(FlaskForm):
     title = StringField('Title', validators=[
         DataRequired()
     ])

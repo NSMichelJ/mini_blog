@@ -10,7 +10,10 @@
     {{ post.author.username }}</a>
 </p>
 
-<p>{{ post.created}}</p>
+<p>{{ post.created }}</p>
+{% if post.updated %}
+<p>{{ post.updated }}</p>
+{% endif %}
 
 <p>Lectura {{ post.read_time}} mins</p>
 

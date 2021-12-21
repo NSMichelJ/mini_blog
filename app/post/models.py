@@ -28,6 +28,11 @@ class Post(db.Model):
 
     def save(self):
         self.title_slug = slugify(self.title)
-        self.public_id = str(uuid4())
-        db.session.add(self)
+
+        if not self.id:
+            self.public_id = str(uuid4())
+            db.session.add(self)
+        else:
+            self.updated = datetime.now()
+
         db.session.commit()

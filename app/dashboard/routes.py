@@ -7,7 +7,7 @@ from flask_login import login_required
 from flask_login import current_user
 
 from app.post.models import Post
-from .forms import WritePost
+from .forms import WritePostForm
 
 bp = Blueprint('dashboard', __name__, template_folder='templates')
 
@@ -19,7 +19,7 @@ def dashboard():
 @bp.route('/dashboard/write-post', methods=['GET', 'POST'])
 @login_required
 def write_post():
-    form = WritePost()
+    form = WritePostForm()
     if request.method == 'POST':
         if form.validate_on_submit:
             title = form.title.data
@@ -40,3 +40,25 @@ def write_post():
                 slug=post.title_slug
             ))
     return render_template('write_post.html', form=form)
+
+@bp.route('/dashboard/<string:uuid>/edit-post', methods=['GET', 'POST'])
+@login_required
+def edit_post(uuid):
+    post = Post.query.filter_by(public_id=uuid).first_or_404()
+
+    form = WritePostForm(obj=post)
+    if request.method == 'POST':
+        if form.validate_on_submit:
+            post.title = form.title.data
+            post.content = form.content.data
+            post.read_time = form.read_time.data
+
+            post.save()
+
+        return redirect(url_for(
+                'post.show_post',
+                uuid=post.public_id,
+                slug=post.title_slug
+            ))
+
+    return render_template('edit_post.html', form=form)
