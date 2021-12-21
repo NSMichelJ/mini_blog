@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String)
     admin = db.Column(db.Boolean, default=False)
     posts = db.relationship('Post', backref='author', lazy=True, cascade="all, delete")
+    comment = db.relationship('Comment', backref='author', lazy=True, cascade="all, delete")
     created = db.Column(db.DateTime, default=datetime.now())
     updated = db.Column(db.String, nullable=True)
 

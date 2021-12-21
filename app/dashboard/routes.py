@@ -21,7 +21,7 @@ def dashboard():
 def write_post():
     form = WritePostForm()
     if request.method == 'POST':
-        if form.validate_on_submit:
+        if form.validate_on_submit():
             title = form.title.data
             content = form.content.data
             read_time = form.read_time.data
@@ -48,7 +48,7 @@ def edit_post(uuid):
 
     form = WritePostForm(obj=post)
     if request.method == 'POST':
-        if form.validate_on_submit:
+        if form.validate_on_submit():
             post.title = form.title.data
             post.content = form.content.data
             post.read_time = form.read_time.data

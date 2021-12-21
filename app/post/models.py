@@ -14,6 +14,9 @@ class Post(db.Model):
     title_slug = db.Column(db.String)
     content = db.Column(db.Text)
     read_time = db.Column(db.Integer)
+    comments = db.relationship('Comment',
+        backref='post', lazy=True, cascade='all, delete-orphan',
+        order_by='desc(Comment.id)')
     created = db.Column(db.DateTime, default=datetime.now())
     updated = db.Column(db.String, nullable=True)
 
@@ -29,6 +32,30 @@ class Post(db.Model):
     def save(self):
         self.title_slug = slugify(self.title)
 
+        if not self.id:
+            self.public_id = str(uuid4())
+            db.session.add(self)
+        else:
+            self.updated = datetime.now()
+
+        db.session.commit()
+
+class Comment(db.Model):
+    __tablename__ = 'comment'
+    id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.String, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete='CASCADE'), nullable=False)
+    content = db.Column(db.Text)
+    created = db.Column(db.DateTime, default=datetime.now())
+    updated = db.Column(db.String, nullable=True)
+
+    def __init__(self, content, user_id, post_id):
+        self.content = content
+        self.user_id = user_id
+        self.post_id = post_id
+
+    def save(self):
         if not self.id:
             self.public_id = str(uuid4())
             db.session.add(self)
