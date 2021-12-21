@@ -5,8 +5,10 @@ from wtforms import BooleanField
 from wtforms.validators import DataRequired
 from wtforms.validators import EqualTo
 from wtforms.validators import Email
+from wtforms.validators import EqualTo
+from wtforms.validators import Length
 
-from .form_validators import validate_username, validate_email
+from app.common.form import BaseUserForm
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[
@@ -17,26 +19,13 @@ class LoginForm(FlaskForm):
     ])
     remember_me = BooleanField('Remember me')
 
-class SignupForm(FlaskForm):
-    username = StringField('Username', validators=[
-        DataRequired(),
-        validate_username
-    ])
-    first_name = StringField('First Name', validators=[
-        DataRequired()
-    ])
-    last_name = StringField('Last Name', validators=[
-        DataRequired()
-    ])
-    email = email = StringField('Email', validators=[
-        DataRequired('Este campo es necesario'),
-        Email('La direccion de email es invalida'),
-        validate_email
-    ])
+class SignupForm(BaseUserForm):
     password = PasswordField('Password', validators=[
-        DataRequired()
+        DataRequired(),
+        Length(min=8)
     ])
     confirm_password = PasswordField('Confirm Password', validators=[
         DataRequired(),
+        Length(min=8),
         EqualTo('password')
     ])

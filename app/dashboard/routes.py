@@ -8,6 +8,7 @@ from flask_login import current_user
 
 from app.post.models import Post
 from .forms import WritePostForm
+from .forms import EditProfileForm
 
 bp = Blueprint('dashboard', __name__, template_folder='templates')
 
@@ -15,6 +16,22 @@ bp = Blueprint('dashboard', __name__, template_folder='templates')
 @login_required
 def dashboard():
     return render_template('dashboard.html')
+
+@bp.route('/dashboard/edit-profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm(obj=current_user)
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            current_user.username = form.username.data
+            current_user.email = form.email.data
+            current_user.first_name = form.first_name.data
+            current_user.last_name = form.last_name.data
+
+            current_user.save()
+        
+        return redirect(url_for('dashboard.dashboard'))
+    return render_template('edit_profile.html', form=form)
 
 @bp.route('/dashboard/write-post', methods=['GET', 'POST'])
 @login_required

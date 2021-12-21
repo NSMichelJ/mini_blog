@@ -57,6 +57,8 @@ def signup():
 
             user.created_password(request.form['password'])
             user.save()
+
+            login_user(user)
             return redirect(url_for('dashboard.dashboard'))
 
     return render_template('signup.html', form=form)
