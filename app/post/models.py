@@ -40,6 +40,10 @@ class Post(db.Model):
 
         db.session.commit()
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
 class Comment(db.Model):
     __tablename__ = 'comment'
     id = db.Column(db.Integer, primary_key=True)

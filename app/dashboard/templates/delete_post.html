@@ -1,0 +1,11 @@
+{% extends '_base.html' %}
+
+{% block title %}Delete Post{% endblock %}
+
+{% block content %}
+<h1>Esta seguro de querer eliminar el articulo {{ post.title}}</h1>
+<form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <button>Si, seguro</button>
+</form>
+{% endblock %}

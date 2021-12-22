@@ -29,7 +29,7 @@ def edit_profile():
             current_user.last_name = form.last_name.data
 
             current_user.save()
-        
+
         return redirect(url_for('dashboard.dashboard'))
     return render_template('edit_profile.html', form=form)
 
@@ -70,7 +70,8 @@ def edit_post(uuid):
             post.content = form.content.data
             post.read_time = form.read_time.data
 
-            post.save()
+            if post.author_id == current_user.id:
+                post.save()
 
         return redirect(url_for(
                 'post.show_post',
@@ -79,3 +80,18 @@ def edit_post(uuid):
             ))
 
     return render_template('edit_post.html', form=form)
+
+@bp.route('/dashboard/<string:uuid>/delete-post', methods=['GET', 'POST'])
+@login_required
+def delete_post(uuid):
+    post = Post.query.filter_by(public_id=uuid).first_or_404()
+
+    if post.author_id != current_user.id:
+        return redirect(url_for('dashboard.dashboard'))
+
+    if request.method == 'POST':
+        post.delete()
+        return redirect(url_for('dashboard.dashboard'))
+
+
+    return render_template('delete_post.html', post=post)
