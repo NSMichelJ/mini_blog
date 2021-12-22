@@ -6,7 +6,9 @@ from flask import url_for
 from flask_login import login_required
 from flask_login import current_user
 
+from app.auth.models import User
 from app.post.models import Post
+
 from .forms import WritePostForm
 from .forms import EditProfileForm
 
@@ -95,3 +97,29 @@ def delete_post(uuid):
 
 
     return render_template('delete_post.html', post=post)
+
+@bp.route('/follow/<username>', methods=['POST'])
+@login_required
+def follow(username):
+    if request.method == 'POST':
+        user = User.query.filter_by(username=username).first_or_404()
+
+        if user.id == current_user.id:
+            return redirect(url_for('public.show_user', username=username))
+
+        current_user.follow(user)
+        current_user.save()
+        return redirect(url_for('public.show_user', username=username))
+
+@bp.route('/unfollow/<username>', methods=['POST'])
+@login_required
+def unfollow(username):
+    if request.method == 'POST':
+        user = User.query.filter_by(username=username).first_or_404()
+
+        if user.id == current_user.id:
+            return redirect(url_for('public.show_user', username=username))
+
+        current_user.unfollow(user)
+        current_user.save()
+        return redirect(url_for('public.show_user', username=username))

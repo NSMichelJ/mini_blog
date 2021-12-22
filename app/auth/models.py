@@ -8,6 +8,11 @@ from werkzeug.security import generate_password_hash
 from app.ext import db
 from app.ext import login_manager
 
+followers = db.Table('followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
+)
+
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -21,6 +26,11 @@ class User(db.Model, UserMixin):
     comment = db.relationship('Comment', backref='author', lazy=True, cascade="all, delete")
     created = db.Column(db.DateTime, default=datetime.now())
     updated = db.Column(db.String, nullable=True)
+    followed = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
     def __init__(self, username, first_name, last_name, email):
         self.username = username
@@ -47,6 +57,18 @@ class User(db.Model, UserMixin):
     
     def create_admin(self):
         self.admin = True
+
+    def follow(self, user):
+        if not self.is_following(user):
+            self.followed.append(user)
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
+
+    def is_following(self, user):
+        return self.followed.filter(
+            followers.c.followed_id == user.id).count() > 0
 
 @login_manager.user_loader
 def load_user(id):

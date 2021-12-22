@@ -6,4 +6,20 @@
 <h1>@{{ user.username}}</h1>
 <h2>{{ user.first_name}} {{ user.last_name }}</h2>
 <h2>{{ user.email }}</h2>
+<p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
+{% if not current_user.is_following(user) %}
+        <p>
+        <form action="{{ url_for('dashboard.follow', username=user.username) }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="button is-primary">Seguir</button>
+        </form>
+        </p>
+        {% else %}
+        <p>
+        <form action="{{ url_for('dashboard.unfollow', username=user.username) }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="button is-danger">No seguir</button>
+        </form>
+        </p>
+        {% endif %}
 {% endblock %}
