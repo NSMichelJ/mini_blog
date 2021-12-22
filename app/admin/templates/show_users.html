@@ -1,0 +1,36 @@
+{% extends '_base_admin.html' %}
+
+{% block title %}{{ current_user.username }}{% endblock %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Followers</th>
+            <th>Followed</th>
+            <th>Post</th>
+            <th>Registrado</th>
+            <th>Admin</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.username}}</td>
+            <td>{{ user.email}}</td>
+            <td>{{ user.followers.count() }}</td>
+            <td>{{ user.followed.count() }}</td>
+            <td>{{ user.posts.__len__() }}</td>
+            <td>{{ user.created }}</td>
+            <td>{{ user.admin}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h4>Usuarios: {{ users.__len__() }}</h4>
+
+{% endblock %}
