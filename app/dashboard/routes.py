@@ -30,9 +30,11 @@ def edit_profile():
             current_user.first_name = form.first_name.data
             current_user.last_name = form.last_name.data
 
+            if form.password.data != '':
+                current_user.created_password(form.password.data)
             current_user.save()
+            return redirect(url_for('dashboard.dashboard'))
 
-        return redirect(url_for('dashboard.dashboard'))
     return render_template('edit_profile.html', form=form)
 
 @bp.route('/dashboard/write-post', methods=['GET', 'POST'])

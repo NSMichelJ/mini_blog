@@ -28,7 +28,15 @@
 
     {{ form.password.label }}
     {{ form.password }}
-    {{ render_field(form.password) }}
+    {% if form.password.errors %}
+    <ul>
+        <li>La contraseña es insegura, debe contener:</li>
+        <li>Al menos un carácter en mayúscula y uno en minúscula.</li>
+        <li>Al menos un número.</li>
+        <li>Al menos un símbolo especial.</li>
+        <li>Una longitud de entre 8 y 20 caracteres.</li>
+    </ul>
+    {% endif %}
 
     {{ form.confirm_password.label }}
     {{ form.confirm_password }}

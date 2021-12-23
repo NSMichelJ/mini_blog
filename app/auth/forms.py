@@ -7,8 +7,10 @@ from wtforms.validators import EqualTo
 from wtforms.validators import Email
 from wtforms.validators import EqualTo
 from wtforms.validators import Length
+from wtforms.validators import Regexp
 
 from app.common.form import BaseUserForm
+from app.common.form.form_validators import regex_valid_password
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[
@@ -22,6 +24,7 @@ class LoginForm(FlaskForm):
 class SignupForm(BaseUserForm):
     password = PasswordField('Password', validators=[
         DataRequired(),
+        Regexp(regex=regex_valid_password),
         Length(min=8)
     ])
     confirm_password = PasswordField('Confirm Password', validators=[

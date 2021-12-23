@@ -30,3 +30,5 @@ def is_email_busy(form, field):
         if not current_user.is_authenticated or user.email != current_user.email:
             field.data = ''
             raise ValidationError('La dirección de correo electrónico se encuentra en uso, por favor elija otro.')
+
+regex_valid_password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&.,])[A-Za-z\d@$!#%*?&.,]{8,20}$"
