@@ -27,7 +27,7 @@ def upgrade():
     sa.Column('content', sa.Text(), nullable=True),
     sa.Column('read_time', sa.Integer(), nullable=True),
     sa.Column('created', sa.DateTime(), nullable=True),
-    sa.Column('updated', sa.String(), nullable=True),
+    sa.Column('updated', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['author_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )

@@ -10,7 +10,7 @@
             <th>Username</th>
             <th>Email</th>
             <th>Followers</th>
-            <th>Followed</th>
+            <th>Following</th>
             <th>Post</th>
             <th>Registrado</th>
             <th>Admin</th>
@@ -24,7 +24,7 @@
             <td>{{ user.followers.count() }}</td>
             <td>{{ user.followed.count() }}</td>
             <td>{{ user.posts.__len__() }}</td>
-            <td>{{ user.created }}</td>
+            <td>{{ user.created|strftime }}</td>
             <td>{{ user.admin}}</td>
         </tr>
         {% endfor %}

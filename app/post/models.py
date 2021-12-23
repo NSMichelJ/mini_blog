@@ -18,7 +18,7 @@ class Post(db.Model):
         backref='post', lazy=True, cascade='all, delete-orphan',
         order_by='desc(Comment.id)')
     created = db.Column(db.DateTime, default=datetime.now())
-    updated = db.Column(db.String, nullable=True)
+    updated = db.Column(db.DateTime, nullable=True)
 
     def __init__(self, title, content, read_time, author_id):
         self.title = title
@@ -52,7 +52,7 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete='CASCADE'), nullable=False)
     content = db.Column(db.Text)
     created = db.Column(db.DateTime, default=datetime.now())
-    updated = db.Column(db.String, nullable=True)
+    updated = db.Column(db.DateTime, nullable=True)
 
     def __init__(self, content, user_id, post_id):
         self.content = content

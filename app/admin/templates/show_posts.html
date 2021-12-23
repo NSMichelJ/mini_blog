@@ -22,8 +22,8 @@
             <td>{{ post.author.username }}</td>
             <td>{{ post.comments.__len__() }}</td>
             <td>{{ post.read_time }}</td>
-            <td>{{ post.created }}</td>
-            <td>{{ post.updated }}</td>
+            <td>{{ post.created|strftime }}</td>
+            <td>{{ post.updated|strftime }}</td>
         </tr>
         {% endfor %}
     </tbody>

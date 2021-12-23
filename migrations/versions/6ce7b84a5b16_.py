@@ -25,7 +25,7 @@ def upgrade():
     sa.Column('post_id', sa.Integer(), nullable=False),
     sa.Column('content', sa.Text(), nullable=True),
     sa.Column('created', sa.DateTime(), nullable=True),
-    sa.Column('updated', sa.String(), nullable=True),
+    sa.Column('updated', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['post_id'], ['post.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')

@@ -9,9 +9,9 @@
         {{ post.author.username }}</a>
 </p>
 
-<p>{{ post.created }}</p>
+<p>el {{ post.created|strftime('full') }}</p>
 {% if post.updated %}
-<p>{{ post.updated }}</p>
+<p>editado el {{ post.updated|strftime('full') }}</p>
 {% endif %}
 
 <p>Lectura {{ post.read_time}} mins</p>
@@ -25,6 +25,7 @@
     <li>
         <p><a href="{{ url_for('public.show_user', username=comment.author.username) }}">@{{ comment.author.username }}</a> dice:</p>
         <p>{{ comment.content }}</p>
+        <p>{{ comment.created|strftime('short')}}</p>
     </li>
     {% endfor %}
 </ul>

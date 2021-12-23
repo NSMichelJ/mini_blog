@@ -4,6 +4,7 @@ from flask import Flask
 
 from app.admin.routes import bp as admin_bp 
 from app.auth.routes import bp as auth_bp
+from app.common.filters import strftime_filter
 from app.dashboard.routes import bp as dash_bp
 from app.ext import *
 from app.post.routes import bp as post_bp
@@ -14,6 +15,9 @@ def create_app():
     
     app = Flask(__name__)
     app.config.from_object(settings_module)
+
+    register_filter(app)
+
     app.register_blueprint(public_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(dash_bp)
@@ -30,3 +34,6 @@ def create_app():
     ckeditor.init_app(app)
 
     return app
+
+def register_filter(app):
+    app.jinja_env.filters['strftime'] = strftime_filter

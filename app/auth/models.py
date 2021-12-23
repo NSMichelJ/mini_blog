@@ -25,7 +25,7 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True, cascade="all, delete")
     comment = db.relationship('Comment', backref='author', lazy=True, cascade="all, delete")
     created = db.Column(db.DateTime, default=datetime.now())
-    updated = db.Column(db.String, nullable=True)
+    updated = db.Column(db.DateTime, nullable=True)
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),

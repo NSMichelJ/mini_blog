@@ -26,7 +26,7 @@ def upgrade():
     sa.Column('email', sa.String(), nullable=True),
     sa.Column('password', sa.String(), nullable=True),
     sa.Column('created', sa.DateTime(), nullable=True),
-    sa.Column('updated', sa.String(), nullable=True),
+    sa.Column('updated', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
