@@ -1,36 +1,40 @@
-import argparse
+"""
+Author: NSMichelJ
+Crea el punto de entrada a la app
+"""
+
+import click
+from sqlalchemy.exc import IntegrityError
 
 from app import create_app
 from app.auth.models import User
 
 app = create_app()
 
+@app.cli.command("createadmin", help='Create the admin to the MiniBlog')
 def create_admin():
-    parser = argparse.ArgumentParser(
-        prog="MiniBlog CLI",
-        usage="python entrypoint.py createadmin",
-        description="Create the admin to the MiniBlog"
-    )
-    parser.add_argument("createadmin")
-    args = parser.parse_args()
-    if args.createadmin == 'createadmin':
+    """
+    Crea el administrador del sitio
+    """
+    username = click.prompt('Please enter an Username', type=str, default='Admin')
+    first_name = click.prompt('Please enter a First Name', type=str)
+    last_name = click.prompt('Please enter a Last Name', type=str)
+    email = click.prompt('Please enter an Email Address', type=str)
+    password = click.prompt('Please enter a Password', hide_input=True, confirmation_prompt=True)
+
+    if click.confirm('Do you want to continue?'):
         with app.app_context():
-            username = input('Username: ')
-            email = input('Email: ')
-            password = input('Password: ')
+            try:
+                admin = User(
+                    username,
+                    first_name,
+                    last_name,
+                    email,
+                )
+                admin.created_password(password)
+                admin.create_admin()
+                admin.save()
+            except IntegrityError:
+                click.echo('Sorry. That username or email already exists.')
 
-            admin = User(
-                username,
-                'Admin',
-                'Admin',
-                email,
-            )
-            admin.created_password(password)
-            admin.create_admin()
-            admin.save()
-
-    else:
-        print(f'command {args.createadmin} not found, run python entrypoint.py --help')
-
-if __name__ == '__main__':
-    create_admin()
+        click.echo('Well done!')
