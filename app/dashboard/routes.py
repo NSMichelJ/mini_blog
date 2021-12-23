@@ -11,16 +11,19 @@ from app.post.models import Post
 
 from .forms import WritePostForm
 from .forms import EditProfileForm
+from app.common.decorators import check_confirmed
 
 bp = Blueprint('dashboard', __name__, template_folder='templates')
 
 @bp.route('/dashboard')
 @login_required
+@check_confirmed
 def dashboard():
     return render_template('dashboard.html')
 
 @bp.route('/dashboard/edit-profile', methods=['GET', 'POST'])
 @login_required
+@check_confirmed
 def edit_profile():
     form = EditProfileForm(obj=current_user)
     if request.method == 'POST':
@@ -39,6 +42,7 @@ def edit_profile():
 
 @bp.route('/dashboard/write-post', methods=['GET', 'POST'])
 @login_required
+@check_confirmed
 def write_post():
     form = WritePostForm()
     if request.method == 'POST':
@@ -64,6 +68,7 @@ def write_post():
 
 @bp.route('/dashboard/<string:uuid>/edit-post', methods=['GET', 'POST'])
 @login_required
+@check_confirmed
 def edit_post(uuid):
     post = Post.query.filter_by(public_id=uuid).first_or_404()
 
@@ -86,6 +91,7 @@ def edit_post(uuid):
     return render_template('edit_post.html', form=form)
 
 @bp.route('/dashboard/<string:uuid>/delete-post', methods=['GET', 'POST'])
+@check_confirmed
 @login_required
 def delete_post(uuid):
     post = Post.query.filter_by(public_id=uuid).first_or_404()
@@ -102,6 +108,7 @@ def delete_post(uuid):
 
 @bp.route('/follow/<username>', methods=['POST'])
 @login_required
+@check_confirmed
 def follow(username):
     if request.method == 'POST':
         user = User.query.filter_by(username=username).first_or_404()
@@ -115,6 +122,7 @@ def follow(username):
 
 @bp.route('/unfollow/<username>', methods=['POST'])
 @login_required
+@check_confirmed
 def unfollow(username):
     if request.method == 'POST':
         user = User.query.filter_by(username=username).first_or_404()

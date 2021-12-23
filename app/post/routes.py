@@ -6,6 +6,7 @@ from flask import url_for
 from flask_login import current_user
 from flask_login import login_required
 
+from app.common.decorators import check_confirmed
 from .form import CommentForm
 from .models import Comment
 from .models import Post
@@ -33,6 +34,7 @@ def show_post(uuid, slug):
 
 @bp.route('/like/<uuid>/<action>', methods=['POST'])
 @login_required
+@check_confirmed
 def like_action(uuid, action):
     post = Post.query.filter_by(public_id=uuid).first_or_404()
     if action == 'like':

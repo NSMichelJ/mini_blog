@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint
 from flask import flash
 from flask import redirect
@@ -10,6 +12,7 @@ from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
 
+from app.common.utils import encode_token, decode_token
 from .forms import LoginForm
 from .forms import SignupForm
 from .decorators import if_user_authenticated_redirect
@@ -49,19 +52,52 @@ def signup():
     if request.method == 'POST':
         if form.validate_on_submit():
             user = User(
-                request.form['username'],
-                request.form['first_name'],
-                request.form['last_name'],
-                request.form['email']
+                form.username.data,
+                form.first_name.data,
+                form.last_name.data,
+                form.email.data
             )
 
             user.created_password(request.form['password'])
             user.save()
 
             login_user(user)
+
+            token = encode_token(user.email)
+            url = url_for('auth.confirm_email', token=token)
+            
             return redirect(url_for('dashboard.dashboard'))
 
     return render_template('signup.html', form=form)
+
+@bp.route('/confirm/<token>')
+@login_required
+def confirm_email(token):
+    try:
+        email = decode_token(token)
+    except:
+        flash('El enlace de confirmación es invalido o a expirado.', 'danger')
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.confirmed:
+        flash('Account already confirmed. Please login.', 'success')
+    else:
+        user.confirmed = True
+        user.confirmed_on = datetime.now()
+        user.save()
+        flash('Has confirmado tu email. Gracias!', 'success')
+    return redirect(url_for('dashboard.dashboard'))
+
+@bp.route('/resend')
+@login_required
+def resend_confirmation():
+    token = encode_token(current_user.email)
+    url = url = url_for('auth.confirm_email', token=token)
+    flash('Un nuevo email de confirmación ha sido enviado.', 'success')
+    return redirect(url_for('auth.unconfirmed'))
+
+@bp.route('/unconfirmed')
+def unconfirmed():
+    return render_template('unconfirmed.html')
 
 @bp.route('/logout')
 def logout():

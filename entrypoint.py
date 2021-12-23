@@ -2,6 +2,7 @@
 Author: NSMichelJ
 Crea el punto de entrada a la app
 """
+from datetime import datetime
 
 import click
 from sqlalchemy.exc import IntegrityError
@@ -31,6 +32,9 @@ def create_admin():
                     last_name,
                     email,
                 )
+
+                admin.confirmed = True
+                admin.confirmed_on = datetime.now()
                 admin.created_password(password)
                 admin.create_admin()
                 admin.save()

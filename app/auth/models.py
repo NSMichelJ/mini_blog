@@ -25,6 +25,8 @@ class User(db.Model, UserMixin):
     admin = db.Column(db.Boolean, default=False)
     posts = db.relationship('Post', backref='author', lazy=True, cascade="all, delete")
     comment = db.relationship('Comment', backref='author', lazy=True, cascade="all, delete")
+    confirmed = db.Column(db.Boolean, default=False)
+    confirmed_on = db.Column(db.DateTime, nullable=True)
     created = db.Column(db.DateTime, default=datetime.now())
     updated = db.Column(db.DateTime, nullable=True)
     followed = db.relationship(
