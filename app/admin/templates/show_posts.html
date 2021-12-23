@@ -10,6 +10,7 @@
             <th>Titulo</th>
             <th>Autor</th>
             <th>Comentarios</th>
+            <th>Likes</th>
             <th>Tiempo de lectura</th>
             <th>Creado</th>
             <th>Modificado</th>
@@ -21,7 +22,8 @@
             <td><a href="{{url_for('post.show_post', uuid=post.public_id, slug=post.title_slug)}}">{{ post.title }}</a></td>
             <td>{{ post.author.username }}</td>
             <td>{{ post.comments.__len__() }}</td>
-            <td>{{ post.read_time }}</td>
+            <td>{{ post.likes.count() }}</td>
+            <td>{{ post.read_time }} min</td>
             <td>{{ post.created|strftime }}</td>
             <td>{{ post.updated|strftime }}</td>
         </tr>

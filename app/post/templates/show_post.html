@@ -20,10 +20,28 @@
     {{post.content|safe}}
 </div>
 
+<p>{{ post.likes.count() }} likes</p>
+{% if current_user.has_liked_post(post) %}
+
+    <form action="{{ url_for('post.like_action', uuid=post.public_id, action='unlike') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="button is-danger">Unlike</button>
+    </form>
+
+{% else %}
+
+    <form action="{{ url_for('post.like_action', uuid=post.public_id, action='like') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="button is-primary">Like</button>
+    </form>
+
+{% endif %}
+
 <ul>
     {% for comment in post.comments%}
     <li>
-        <p><a href="{{ url_for('public.show_user', username=comment.author.username) }}">@{{ comment.author.username }}</a> dice:</p>
+        <p><a href="{{ url_for('public.show_user', username=comment.author.username) }}">@{{ comment.author.username
+                }}</a> dice:</p>
         <p>{{ comment.content }}</p>
         <p>{{ comment.created|strftime('short')}}</p>
     </li>
@@ -32,11 +50,11 @@
 
 
 {% if current_user.is_authenticated %}
-    <form method="post">
-        {{ form.csrf_token() }}
-        {{ form.content }}
-        <button>Send</button>
-    </form>
+<form method="post">
+    {{ form.csrf_token() }}
+    {{ form.content }}
+    <button>Send</button>
+</form>
 {% endif %}
 
 

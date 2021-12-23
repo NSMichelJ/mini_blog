@@ -4,6 +4,7 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from flask_login import current_user
+from flask_login import login_required
 
 from .form import CommentForm
 from .models import Comment
@@ -29,3 +30,15 @@ def show_post(uuid, slug):
             slug=post.title_slug
         ))
     return render_template('show_post.html', form=form, post=post)
+
+@bp.route('/like/<uuid>/<action>', methods=['POST'])
+@login_required
+def like_action(uuid, action):
+    post = Post.query.filter_by(public_id=uuid).first_or_404()
+    if action == 'like':
+        current_user.like_post(post)
+        current_user.save()
+    if action == 'unlike':
+        current_user.unlike_post(post)
+        current_user.save()
+    return redirect(request.referrer)

@@ -17,6 +17,7 @@ class Post(db.Model):
     comments = db.relationship('Comment',
         backref='post', lazy=True, cascade='all, delete-orphan',
         order_by='desc(Comment.id)')
+    likes = db.relationship('PostLike', backref='post', lazy='dynamic')
     created = db.Column(db.DateTime, default=datetime.now())
     updated = db.Column(db.DateTime, nullable=True)
 
@@ -43,6 +44,12 @@ class Post(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+class PostLike(db.Model):
+    __tablename__ = 'post_like'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 
 class Comment(db.Model):
     __tablename__ = 'comment'
