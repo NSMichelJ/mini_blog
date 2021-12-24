@@ -6,12 +6,14 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import current_app
 from flask_login import login_user
 from flask_login import current_user
 from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
 
+from app.common.mail import send_mail
 from app.common.utils import encode_token, decode_token
 from .forms import LoginForm
 from .forms import SignupForm
@@ -64,23 +66,33 @@ def signup():
             login_user(user)
 
             token = encode_token(user.email)
-            url = url_for('auth.confirm_email', token=token)
-            
-            return redirect(url_for('dashboard.dashboard'))
+            url = url_for('auth.confirm_email', token=token, _external=True)
+            body = render_template('email_template/email.txt', url=url)
+            html = render_template('email_template/email.html', url=url)
+
+            send_mail(
+                'Por favor, confirme su email',
+                recipients=[current_user.email],
+                sender=current_app.config['MAIL_USERNAME'],
+                body=body,
+                html=html
+            )
+            return redirect(url_for('auth.unconfirmed'))
 
     return render_template('signup.html', form=form)
 
 @bp.route('/confirm/<token>')
 @login_required
 def confirm_email(token):
-    try:
-        email = decode_token(token)
-    except:
-        flash('El enlace de confirmación es invalido o a expirado.', 'danger')
-    user = User.query.filter_by(email=email).first_or_404()
-    if user.confirmed:
-        flash('Account already confirmed. Please login.', 'success')
+    if current_user.confirmed:
+        flash('La cuenta ya esta confirmada.', 'success')
     else:
+        try:
+            email = decode_token(token)
+        except:
+            flash('El enlace de confirmación es invalido o a expirado.', 'danger')
+        user = User.query.filter_by(email=email).first_or_404()
+
         user.confirmed = True
         user.confirmed_on = datetime.now()
         user.save()
@@ -90,13 +102,30 @@ def confirm_email(token):
 @bp.route('/resend')
 @login_required
 def resend_confirmation():
-    token = encode_token(current_user.email)
-    url = url = url_for('auth.confirm_email', token=token)
-    flash('Un nuevo email de confirmación ha sido enviado.', 'success')
-    return redirect(url_for('auth.unconfirmed'))
+    if not current_user.confirmed:
+        token = encode_token(current_user.email)
+        url = url = url_for('auth.confirm_email', token=token, _external=True)
+        body = render_template('email_template/email.txt', url=url)
+        html = render_template('email_template/email.html', url=url)
+        send_mail(
+            'Por favor, confirme su email',
+            recipients=[current_user.email],
+            sender=current_app.config['MAIL_USERNAME'],
+            body=body,
+            html=html
+        )
+        flash('Un nuevo email de confirmación ha sido enviado.', 'success')
+        return redirect(url_for('auth.unconfirmed'))
+    else:
+        flash('La cuenta ya esta confirmada.', 'success')
+        return redirect(url_for('dashboard.dashboard'))
 
 @bp.route('/unconfirmed')
+@login_required
 def unconfirmed():
+    if current_user.confirmed:
+        flash('La cuenta ya esta confirmada.', 'success')
+        return redirect(url_for('dashboard.dashboard'))
     return render_template('unconfirmed.html')
 
 @bp.route('/logout')

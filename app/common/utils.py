@@ -19,8 +19,8 @@ def decode_token(token, expiration=None):
     """
     Decodifica el token y retorna la dirección de email.
 
-    :param email:
-        Dirección de email.
+    :param token:
+        Token a decodificar.
     :param expiration:
         Tiempo de expiración del token, default 3600s.
     """

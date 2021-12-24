@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Por favor, confirme su email</title>
+</head>
+<body>
+   <h1>Gracias por su registro en el Miniblog</h1>
+   <P>Por favor presione el boton para confirmar su email</P>
+   <form action="{{ url }}" method="get">
+       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+       <button>Confirm Email</button>
+   </form>
+   <p>O siga el siguiente enlace.<a href="{{ url }}">{{ url }}</a></p>
+    <p><strong>Si tu no usas este enlace en 1 hora expirara</strong></p>
+</body>
+</html>
