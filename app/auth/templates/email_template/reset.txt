@@ -1,0 +1,2 @@
+Olvido su contraseña?
+Si usted a perdido su contraseña siga el enlace {{ url }} para restablecer su contraseña.

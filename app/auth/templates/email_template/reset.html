@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olvido su contraseña?</title>
+</head>
+<body>
+    <h1>Si usted a perdido su contraseña presione el boton</h1>
+
+    <form action="{{ url }}" method="get">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button>Reset my password</button>
+    </form>
+
+    <p>O siga el enlace <a href="{{ url }}">{{ url }}</a>para restablecer su contraseña.</p>
+</body>
+</html>

@@ -2,22 +2,22 @@
 Utlidades de la app
 """
 
-from flask import current_app, url_for
+from flask import current_app
 from itsdangerous import URLSafeTimedSerializer
 
-def encode_token(email):
+def encode_token(obj):
     """
-    Retorna el email codificado.
+    Retorna un string codificado.
 
-    :param email:
-        Dirección de email.
+    :param obj:
+        Tipo de dato a codificar
     """
     serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-    return serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+    return serializer.dumps(obj, salt=current_app.config['SECURITY_PASSWORD_SALT'])
 
 def decode_token(token, expiration=None):
     """
-    Decodifica el token y retorna la dirección de email.
+    Decodifica el token y retorna un tipo de dato.
 
     :param token:
         Token a decodificar.
@@ -30,11 +30,12 @@ def decode_token(token, expiration=None):
         expiration = 3600
 
     try:
-        email = serializer.loads(
+        obj = serializer.loads(
             token,
             salt=current_app.config['SECURITY_PASSWORD_SALT'],
             max_age=expiration
         )
-        return email
-    except:
+        return obj
+
+    except Exception:
         return False
