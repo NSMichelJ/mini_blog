@@ -31,7 +31,7 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Por favor inicie sección'
-    login_manager.login_message_category = 'info'
+    login_manager.login_message_category = 'warning'
     csrf.init_app(app)
     ckeditor.init_app(app)
     mail.init_app(app)

@@ -3,5 +3,15 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>hello!</h1>
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold">MiniBlog, escribe sobre lo que te apasiona y a tu manera</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Tanto si quieres compartir tus conocimientos como dar las últimas noticias o decir lo que se te pase por la cabeza, en el MiniBlog estás muy bien acompañado. Regístrate ahora es gratis!
+        </p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{{ url_for('auth.login') }}" class="btn btn-primary px-4 gap-3">Login</a>
+            <a href="{{ url_for('auth.signup') }}" class="btn btn-outline-secondary px-4">Signup</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

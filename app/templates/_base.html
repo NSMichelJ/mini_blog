@@ -1,24 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock%} | Bienvenido al miniblog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 </head>
+
 <body>
 
-    {% with messages = get_flashed_messages(with_categories=True) %}
-    {% if messages %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('public.index') }}">MiniBlog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Opciones
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li><a class="dropdown-item" href="{{ url_for('dashboard.edit_profile')}}">Editar Perfil</a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('public.show_user', username=current_user.username)}}">Ver Perfil</a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('dashboard.write_post')}}">Escribir Post</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
+                        </ul>
+                      </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.signup')}}">Signup</a>
+                    </li>
+                    {% endif %}
+                    
+                </ul>
+                <form action="{{ url_for('public.search')}}" method="GET" class="d-flex">
+                    <input class="form-control me-2" name="q" type="search" placeholder="Buscar Post" aria-label="Search">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+    
+        {% for category, message in messages %}
+        <div class="alert alert-{{category}} alert-dismissible fade show mt-2" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor%}
+    </div>
     
 
-    {% for category, message  in messages %}
-        {{message}}
-    {% endfor%}
-    
     {% endif%}
     {% endwith %}
 
-    {% block content %}{% endblock%}
+    <div class="container">
+        {% block content %}{% endblock%}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
 </body>
+
 </html>
