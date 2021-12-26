@@ -1,0 +1,17 @@
+{% extends '_base.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<ul>
+    {% for result in results %}
+    <li>
+        <div>
+            <h3><a href="{{ url_for('post.show_post', uuid=result.public_id, slug=result.title_slug)}}">{{ result.title }}</a></h3>
+            <p>escrito por <a href="{{ url_for('public.show_user', username=result.author.username) }}">{{result.author.username }}</a></p>
+        </div>
+    </li>
+
+    {% endfor %}
+</ul>
+{% endblock %}
