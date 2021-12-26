@@ -1,0 +1,39 @@
+{% macro render_field_custom(field) %}
+{{ field.label(class="label")|safe}}
+{{ field(**kwargs)|safe }}
+{% if field.errors %}
+<ul class=errors>
+  {% for error in field.errors %}
+  <li>{{ error }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endmacro %}
+
+{% macro render_field_login(field) %}
+<div class="form-floating mb-3">
+  {{ field(class="form-control", placeholder="username") }}
+  {{ field.label }}
+</div>
+{% endmacro %}
+
+{% macro render_field(field) %}
+<div class="mb-3">
+  {% if not field.errors %}
+
+  {{ field.label(class="form-label") }}
+  {{ field(class="form-control") }}
+
+  {% else %}
+
+  {{ field.label(class="form-label") }}
+  {{ field(class="form-control is-invalid") }}
+
+  {% for error in field.errors %}
+  <div class="invalid-feedback">
+    {{ error}}
+  </div>
+  {% endfor %}
+  {% endif%}
+</div>
+{% endmacro %}

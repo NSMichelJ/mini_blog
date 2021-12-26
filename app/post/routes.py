@@ -32,7 +32,7 @@ def show_post(uuid, slug):
         ))
     return render_template('show_post.html', form=form, post=post)
 
-@bp.route('/like/<uuid>/<action>', methods=['POST'])
+@bp.route('/like/<uuid>/<action>', methods=['GET'])
 @login_required
 @check_confirmed
 def like_action(uuid, action):

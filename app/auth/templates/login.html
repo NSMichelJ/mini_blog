@@ -1,27 +1,32 @@
 {% extends '_base.html' %}
 
-{% block title %}Signup{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
+<div class="card mt-5 auth-form">
+    <div class="card-body">
+        <form method="post" autocomplete="off">
+            {% from '_formhelper.html' import render_field_login %}
 
-<form method="post" autocomplete="off">
-    {% from '_form_error_helper.html' import render_field %}
+            {{ form.csrf_token }}
 
-    {{ form.csrf_token }}
+            {{ render_field_login(form.username) }}
 
-    {{ form.username.label }}
-    {{ form.username }}
-    {{ render_field(form.username) }}
+            <a href="{{ url_for('auth.reset_password') }}">Olvide mi contraseña</a>
+            {{ render_field_login(form.password) }}
 
-    {{ form.password.label }}
-    {{ form.password }}
-    {{ render_field(form.password) }}
+            <div class="mb-3 form-check form-switch">
+                {{ form.remember_me(class="form-check-input")}}
+                {{ form.remember_me.label(class="form-check-label") }}
+            </div>
 
+            <div class="mb-3">
+                <a href="{{ url_for('auth.signup') }}">Aun no me registro</a>
+            </div>
 
-    {{ form.remember_me}}
-    {{ form.remember_me.label }}
+            <button type="submit" class="btn btn-primary">Login</button>
 
-    <button>send</button>
-</form>
-
+        </form>
+    </div>
+</div>
 {% endblock %}

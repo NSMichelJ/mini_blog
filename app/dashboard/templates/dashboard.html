@@ -3,21 +3,50 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h1>Dashboard</h1>
+<div class="pt-2 mt-2 text-end">
+    <p class="h3 text-muted">Bienvenid@, {{ current_user.first_name }} {{ current_user.last_name}}</p>
+</div>
 
-My Post:
-<ul>
+<div class="px-4 py-2 my-2 text-center">
+    <h1 class="display-5 fw-bold">Dashboard</h1>
+</div>
+
+<p class="display-5">Mis Artículos:</p>
+
+{% if current_user.posts != [] %}
+
+<div class="accordion" id="accordionExample">
     {% for post in current_user.posts %}
-    <li>
-        <a 
-        href="{{ url_for(
-            'post.show_post',
-            uuid=post.public_id,
-            slug=post.title_slug) }}">
-            {{ post.title }}
-        </a>
-    </li>
+    <div class="accordion-item">
+        <h4 class="accordion-header" id="heading{{ post.id }}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse{{ post.id }}" aria-expanded="false" aria-controls="collapse{{ post.id }}">
+                {{ post.title}}
+            </button>
+        </h4>
+        <div id="collapse{{ post.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ post.id }}"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <p>{{ post.content[:100] }}...</p>
+                <div>
+                    <p>Ver <a href="{{ url_for('post.show_post',
+                            uuid=post.public_id,
+                            slug=post.title_slug) }}">
+                            {{ post.title }}
+                        </a></p>
+                    <a href="{{ url_for('dashboard.edit_post', uuid=post.public_id) }}"><span
+                        class="badge rounded-pill bg-primary">Editar</span></a>
+
+                <a href="{{ url_for('dashboard.delete_post', uuid=post.public_id) }}"><span
+                        class="badge rounded-pill bg-danger">Eliminar</span></a>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
     {% endfor %}
-</ul>
+</div>
+
+{% endif %}
 
 {% endblock %}

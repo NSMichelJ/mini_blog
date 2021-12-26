@@ -9,7 +9,7 @@ from wtforms.validators import Length
 from wtforms.validators import Regexp
 
 from app.common.form import BaseUserForm
-from app.common.form.form_validators import regex_valid_password
+from app.common.form.form_validators import Password
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[
@@ -27,13 +27,13 @@ class BasePasswordForm():
     """
     password = PasswordField('Password', validators=[
         DataRequired('Es necesario que rellene este campo'),
-        Regexp(regex=regex_valid_password),
-        Length(min=8)
+        Password(),
+        Length(min=8, max=20)
     ])
     confirm_password = PasswordField('Confirm Password', validators=[
         DataRequired('Es necesario que rellene este campo'),
-        Length(min=8),
-        EqualTo('password')
+        Length(min=8, max=20),
+        EqualTo('password', message='La contraseñas deben ser iguales')
     ])
 
 class SignupForm(BaseUserForm, BasePasswordForm):

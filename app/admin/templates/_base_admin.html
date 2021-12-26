@@ -1,12 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %} | Welcome to Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 </head>
+
 <body>
-    {% block content %}{% endblock %}
+
+    <header
+        class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom p-3 bg-dark text-white">
+        <a href="{{ url_for('admin.admin') }}"
+            class="h3 d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            MiniBlog Admin
+        </a>
+
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="{{ url_for('public.index') }}" class="nav-link px-2 text-white">View Site</a>
+
+
+            <li><a href="{{ url_for('dashboard.dashboard') }}" class="nav-link px-2 text-white">Dashboard</a></li>
+        </ul>
+
+        <div class="col-md-3 text-end">
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-warning">Logout</a>
+        </div>
+    </header>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
 </body>
+
 </html>

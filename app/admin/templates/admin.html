@@ -4,10 +4,16 @@
 
 {% block content %}
 
-<h2>Administrador de usuarios:</h2>
-<a href="{{url_for('admin.show_users')}}">Usuarios</a>
-
-<h2>Administrador de artículos:</h2>
-<a href="{{url_for('admin.show_posts')}}">Artículos</a>
+<div style="width: 100%; max-width: 500px;" class="py-5 my-5">
+    <p class="h2">Sitio de administración</p>
+    <ul class="list-group">
+        <li class="list-group-item p-3">
+            <a href="{{url_for('admin.show_users')}}" class="h3">Administrar usuarios</a>
+        </li>
+        <li class="list-group-item  p-3">
+            <a href="{{url_for('admin.show_posts')}}" class="h3">Administrar artículos</a>
+        </li>
+    </ul>
+</div>
 
 {% endblock %}

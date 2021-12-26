@@ -77,6 +77,7 @@ def signup():
                 body=body,
                 html=html
             )
+            flash('Un email de verificación fue enviado.', 'success')
             return redirect(url_for('auth.unconfirmed'))
 
     return render_template('signup.html', form=form)

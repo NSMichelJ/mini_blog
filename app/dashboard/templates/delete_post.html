@@ -3,9 +3,17 @@
 {% block title %}Delete Post{% endblock %}
 
 {% block content %}
-<h1>Esta seguro de querer eliminar el articulo {{ post.title}}</h1>
-<form method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <button>Si, seguro</button>
-</form>
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-6 fw-bold">Esta seguro de querer eliminar este articulo.</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Esta apunto de eliminar la publicación: {{ post.title}}, esta ación es irreversible y no podra deshacer los cambios una vez eliminada la publicación. Estas seguro de querer continuar?</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <button class="btn btn-danger">Si, seguro</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

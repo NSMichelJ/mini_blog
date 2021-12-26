@@ -3,15 +3,19 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
-<ul>
-    {% for result in results %}
-    <li>
-        <div>
+<div class="mt-3">
+    {% if results != [] %}
+    <p class="h5">Resultados: {{ results.__len__() }} por "{{ q }}"</p>
+    <ul class="list-group list-group-flush">
+        {% for result in results %}
+        <li class="list-group-item"><div>
             <h3><a href="{{ url_for('post.show_post', uuid=result.public_id, slug=result.title_slug)}}">{{ result.title }}</a></h3>
-            <p>escrito por <a href="{{ url_for('public.show_user', username=result.author.username) }}">{{result.author.username }}</a></p>
-        </div>
-    </li>
-
-    {% endfor %}
-</ul>
+            <p>Escrito por <a href="{{ url_for('public.show_user', username=result.author.username) }}">{{result.author.username }}</a></p>
+        </div></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="h5">No se encontraron resultados por "{{q}}"</p>
+    {% endif %}
+</div>
 {% endblock %}

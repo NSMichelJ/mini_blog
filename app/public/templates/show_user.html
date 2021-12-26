@@ -3,23 +3,74 @@
 {% block title %}@{{ user.username}}{% endblock %}
 
 {% block content %}
-<h1>@{{ user.username}}</h1>
-<h2>{{ user.first_name}} {{ user.last_name }}</h2>
-<h2>{{ user.email }}</h2>
-<p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
-{% if not current_user.is_following(user) %}
-<p>
-<form action="{{ url_for('dashboard.follow', username=user.username) }}" method="post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <button type="submit" class="button is-primary">Seguir</button>
-</form>
-</p>
-{% else %}
-<p>
-<form action="{{ url_for('dashboard.unfollow', username=user.username) }}" method="post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <button type="submit" class="button is-danger">No seguir</button>
-</form>
-</p>
+<div class="container db-social" style="background: url();">
+    <div class="jumbotron jumbotron-fluid"></div>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-xl-11">
+                <div class="widget head-profile has-shadow">
+                    <div class="widget-body pb-0">
+                        <div class="row d-flex align-items-center">
+                            <div class="col-xl-6 col-md-6 d-flex mt-4 justify-content-center">
+                                <ul>
+                                    <li>
+                                        <div class="counter">{{ user.followers.count() }}</div>
+                                        <div class="heading">Followers</div>
+                                    </li>
+                                    <li>
+                                        <div class="counter">{{ user.followed.count() }}</div>
+                                        <div class="heading">Following</div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col-xl-6 col-md-6 d-flex justify-content-center">
+                                <div class="image-default">
+                                    <img class="rounded-circle" src=""
+                                        alt="">
+                                </div>
+                                <div class="infos">
+                                    <h2>@{{ user.username}}</h2>
+                                    <div class="text-muted">{{ user.email }}</div>
+                                    <div class="text-muted">{{ user.first_name}} {{ user.last_name }}.</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if current_user.username != user.username %}
+<div class="my-4 d-flex justify-content-center">
+    {% if current_user.is_authenticated %}
+    {% if not current_user.is_following(user) %}
+    <form action="{{ url_for('dashboard.follow', username=user.username) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-primary btn-lg">Follow</button>
+    </form>
+    {% else %}
+    <form action="{{ url_for('dashboard.unfollow', username=user.username) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-outline-primary btn-lg">Unfollow</button>
+    </form>
+    {% endif %}
+    {% endif %}
+</div>
 {% endif %}
+
+{% if user.post != [] %}
+<p class="h5">Publicaciones por {{user.username}}</p>
+<ul class="list-group list-group-flush">
+    {% for post in user.posts%}
+    <li class="list-group-item"><a href="{{ url_for('post.show_post', uuid=post.public_id, slug=post.title_slug) }}">{{
+            post.title }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
 {% endblock %}

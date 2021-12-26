@@ -16,7 +16,7 @@ def index():
 def search():
     q = request.args.get('q', '')
     results = Post.query.filter(Post.title.contains(q)).all()
-    return render_template('search.html', results=results)
+    return render_template('search.html', results=results, q=q)
 
 @bp.route('/user/<string:username>')
 def show_user(username):

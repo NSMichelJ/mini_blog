@@ -12,9 +12,9 @@ class BaseUserForm(FlaskForm):
     """
     username = StringField('Username', validators=[
         DataRequired('Es necesario que rellene este campo'),
-        is_username_busy,
         Length(min=6, max=12),
-        username_isalnum
+        UsernameIsalnum(),
+        IsUsernameBusy()
     ])
     first_name = StringField('First Name', validators=[
         Length(min=3, max=12),
@@ -27,5 +27,5 @@ class BaseUserForm(FlaskForm):
     email = StringField('Email', validators=[
         DataRequired('Es necesario que rellene este campo'),
         Email('La dirección de corre electrónico no es correcta'),
-        is_email_busy
+        IsEmailBusy()
     ])

@@ -1,4 +1,8 @@
+from datetime import datetime
+
 from flask import Blueprint
+from flask import current_app
+from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -12,6 +16,8 @@ from app.post.models import Post
 from .forms import WritePostForm
 from .forms import EditProfileForm
 from app.common.decorators import check_confirmed
+from app.common.utils import encode_token
+from app.common.mail import send_mail
 
 bp = Blueprint('dashboard', __name__, template_folder='templates')
 
@@ -29,12 +35,31 @@ def edit_profile():
     if request.method == 'POST':
         if form.validate_on_submit():
             current_user.username = form.username.data
-            current_user.email = form.email.data
             current_user.first_name = form.first_name.data
             current_user.last_name = form.last_name.data
 
             if form.password.data != '':
                 current_user.created_password(form.password.data)
+
+            if current_user.email != form.email.data:
+                current_user.confirmed = False
+                flash('Usted a cambiado su dirección de email, un email de verificación fue enviado.', 'warning')
+                current_user.email= form.email.data
+
+                token = encode_token(current_user.email)
+                url = url_for('auth.confirm_email', token=token, _external=True)
+                body = render_template('email_template/email.txt', url=url)
+                html = render_template('email_template/email.html', url=url)
+                send_mail(
+                    'Por favor, confirme su email',
+                    recipients=[current_user.email],
+                    sender=current_app.config['MAIL_USERNAME'],
+                    body=body,
+                    html=html
+                )
+
+            flash('Perfil actualizado con exito', 'success')
+            current_user.updated = datetime.now()
             current_user.save()
             return redirect(url_for('dashboard.dashboard'))
 
@@ -88,7 +113,7 @@ def edit_post(uuid):
                 slug=post.title_slug
             ))
 
-    return render_template('edit_post.html', form=form)
+    return render_template('edit_post.html', form=form, post=post)
 
 @bp.route('/dashboard/<string:uuid>/delete-post', methods=['GET', 'POST'])
 @check_confirmed

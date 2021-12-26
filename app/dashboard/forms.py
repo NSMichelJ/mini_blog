@@ -10,7 +10,7 @@ from wtforms.validators import EqualTo
 from wtforms.validators import Regexp, Optional
 
 from app.common.form import BaseUserForm
-from app.common.form.form_validators import regex_valid_password
+from app.common.form.form_validators import Password
 
 class WritePostForm(FlaskForm):
     title = StringField('Title', validators=[
@@ -26,8 +26,8 @@ class WritePostForm(FlaskForm):
 class EditProfileForm(BaseUserForm):
     password = PasswordField('Password', validators=[
         Optional(),
-        Regexp(regex=regex_valid_password),
-        Length(min=8)
+        Password(),
+        Length(min=8, max=20)
     ])
     confirm_password = PasswordField('Confirm Password', validators=[
         EqualTo('password'),

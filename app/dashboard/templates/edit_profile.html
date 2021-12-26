@@ -1,48 +1,39 @@
 {% extends '_base.html' %}
 
-{% block title %}Edict Profile{% endblock %}
+{% block title %}Edit Profile{% endblock %}
 
 {% block content %}
-<h1>Edit Profile</h1>
+<div class="px-4 py-2 my-2 text-center">
+    <h1 class="display-5 fw-bold">Editar perfil</h1>
+</div>
 
-<form method="post" autocomplete="off">
-    {% from '_form_error_helper.html' import render_field %}
+<div class="card mt-5 auth-form">
+    <div class="card-body">
+        <form method="post" autocomplete="off">
+            {% from '_formhelper.html' import render_field %}
 
-    {{ form.csrf_token }}
+            {{ form.csrf_token }}
 
-    {{ form.username.label }}
-    {{ form.username }}
-    {{ render_field(form.username) }}
+            {{ render_field(form.username) }}
 
-    {{ form.first_name.label }}
-    {{ form.first_name }}
-    {{ render_field(form.first_name) }}
+            {{ render_field(form.first_name) }}
 
-    {{ form.last_name.label }}
-    {{ form.last_name }}
-    {{ render_field(form.last_name) }}
+            {{ render_field(form.last_name) }}
 
-    {{ form.email.label }}
-    {{ form.email }}
-    {{ render_field(form.email) }}
+            {{ render_field(form.email) }}
 
-    {{ form.password.label }}
-    {{ form.password }}
-    {% if form.password.errors %}
-    <ul>
-        <li>La contraseña es insegura, debe contener:</li>
-        <li>Al menos un carácter en mayúscula y uno en minúscula.</li>
-        <li>Al menos un número.</li>
-        <li>Al menos un símbolo especial.</li>
-        <li>Una longitud de entre 8 y 20 caracteres.</li>
-    </ul>
+            {{ render_field(form.password) }}
+
+            {{ render_field(form.confirm_password) }}
+
+            <button type="submit" class="btn btn-primary">Signup</button>
+        </form>
+    </div>
+
+    {% if current_user.updated %}
+    <div class="card-footer text-muted">
+        Ultimo cambio {{current_user.updated|strftime('full')}}
+    </div>
     {% endif %}
-
-    {{ form.confirm_password.label }}
-    {{ form.confirm_password }}
-    {{ render_field(form.confirm_password) }}
-
-
-    <button>send</button>
-</form>
+</div>
 {% endblock %}
