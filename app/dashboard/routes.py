@@ -1,23 +1,17 @@
 from datetime import datetime
 
-from flask import Blueprint
-from flask import current_app
-from flask import flash
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import url_for
-from flask_login import login_required
-from flask_login import current_user
+from flask import Blueprint, current_app, flash, redirect, \
+                render_template, request, url_for
+from flask_login import current_user, login_required
 
+from app.common.decorators import check_confirmed
+from app.common.mail import send_mail
 from app.auth.models import User
 from app.post.models import Post
-
+from app.common.utils import encode_token, save_image
 from .forms import WritePostForm
 from .forms import EditProfileForm
-from app.common.decorators import check_confirmed
-from app.common.utils import encode_token, save_image
-from app.common.mail import send_mail
+
 
 bp = Blueprint('dashboard', __name__, template_folder='templates')
 
@@ -39,7 +33,6 @@ def edit_profile():
             current_user.last_name = form.last_name.data
 
             if form.profile_image.data:
-                print('XD 1')
                 current_user.profile_image_name = save_image(
                     form.profile_image.data,
                     current_app.config['MEDIA_PROFILE_DIR']
@@ -47,7 +40,6 @@ def edit_profile():
                 current_user.profile_thumbnail = False
 
             if form.background_image.data:
-                print('XD 2')
                 current_user.background_image_name = save_image(
                     form.background_image.data,
                     current_app.config['MEDIA_BACKGROUND_DIR']
@@ -58,7 +50,9 @@ def edit_profile():
 
             if current_user.email != form.email.data:
                 current_user.confirmed = False
-                flash('Usted a cambiado su dirección de email, un email de verificación fue enviado.', 'warning')
+                flash('Usted a cambiado su dirección de email, \
+                un email de verificación fue enviado.', 'warning')
+
                 current_user.email= form.email.data
 
                 token = encode_token(current_user.email)

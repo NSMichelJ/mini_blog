@@ -4,46 +4,52 @@
 
 {% block content %}
 
-<div class="d-flex mt-3 justify-content-between">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{{ url_for('admin.admin') }}">Admin</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Users</li>
-        </ol>
-      </nav>
-      <div>
-          <p class="h4">Welcome {{ current_user }}</p>
-      </div>
-</div>
+<main class="mb-5 pb-5">
+    <div class="d-flex mt-3 justify-content-between">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('admin.admin') }}">Admin</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Users</li>
+            </ol>
+        </nav>
+        <div>
+            <p class="h4">Welcome {{ current_user }}</p>
+        </div>
+    </div>
+    
+    <h4 class="my-2 py-2">Usuarios registrados: {{ users.total }}</h4>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Followers</th>
+                <th>Following</th>
+                <th>Post</th>
+                <th>Registrado</th>
+                <th>Admin</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users.items %}
+            <tr>
+                <td><a href="{{ url_for('public.show_user', username=user.username ) }}">{{ user.username}}</a></td>
+                <td>{{ user.email}}</td>
+                <td>{{ user.followers.count() }}</td>
+                <td>{{ user.followed.count() }}</td>
+                <td>{{ user.posts.__len__() }}</td>
+                <td>{{ user.created|strftime }}</td>
+                <td>{{ user.admin}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {% from '_paginationhelper.html' import render_pagination %}
+    
+    {{ render_pagination(users, 'admin.show_users') }}
 
-<h4 class="my-2 py-2">Usuarios registrados: {{ users.__len__() }}</h4>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Followers</th>
-            <th>Following</th>
-            <th>Post</th>
-            <th>Registrado</th>
-            <th>Admin</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for user in users %}
-        <tr>
-            <td>{{ user.username}}</td>
-            <td>{{ user.email}}</td>
-            <td>{{ user.followers.count() }}</td>
-            <td>{{ user.followed.count() }}</td>
-            <td>{{ user.posts.__len__() }}</td>
-            <td>{{ user.created|strftime }}</td>
-            <td>{{ user.admin}}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+</main>
 
 {% endblock %}

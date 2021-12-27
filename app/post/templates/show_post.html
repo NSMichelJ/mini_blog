@@ -2,6 +2,11 @@
 
 {% block title %}{{post.title}}{% endblock %}
 
+{% block prism %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/prism.css')}}">
+<script src="{{ url_for('static', filename='js/prism.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 
 <main>
@@ -95,7 +100,7 @@
                 <div class="p-4">
                     <h4 class="fst-italic">Mas publicaciones de {{ post.author }}</h4>
                     <ol class="list-unstyled mb-0">
-                        {% for post in post.author.posts %}
+                        {% for post in post.author.posts[0:15] %}
                         <li><a href="{{ url_for('post.show_post', uuid=post.public_id, slug=post.title_slug) }}">{{
                                 post.title }}.</a></li>
                         {% endfor %}

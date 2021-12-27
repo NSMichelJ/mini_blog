@@ -28,3 +28,6 @@ MEDIA_DIR = join(BASE_DIR, 'media')
 MEDIA_BACKGROUND_DIR = join(MEDIA_DIR, 'image/background')
 MEDIA_PROFILE_DIR = join(MEDIA_DIR, 'image/profile')
 MEDIA_PROFILE_THUMBNAIL_DIR = join(MEDIA_PROFILE_DIR, 'thumbnail')
+
+USER_PER_PAGE = 25
+POST_PER_PAGE = 25

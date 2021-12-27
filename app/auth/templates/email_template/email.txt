@@ -1,4 +1,5 @@
-Por favor, confirme su email.
-Gracias por su registro en el Miniblog.
-Presione el siguiente enlace. {{ url }} para confirmar su cuenta.
-Si tu no usas este enlace en 1 hora expirara.
+Gracias por registrarte en el MiniBlog.
+El siguiente paso para escribir publicaciones asombrosas en el MiniBlog.
+Es confirmar su cuenta, pero no se preocupe usted puede usar el siguiente enlace.
+{{ url }}
+Si tu no usas este enlace en 1 hora expirara

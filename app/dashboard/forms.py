@@ -1,13 +1,8 @@
 from flask_wtf import FlaskForm
 from flask_ckeditor import CKEditorField
-from wtforms import StringField
-from wtforms import IntegerField
-from wtforms import PasswordField
-from wtforms.validators import DataRequired
-from wtforms.validators import Length
-from wtforms.validators import NumberRange
-from wtforms.validators import EqualTo
-from wtforms.validators import Regexp, Optional
+from wtforms import StringField, IntegerField, PasswordField
+from wtforms.validators import DataRequired, EqualTo, Length, \
+                NumberRange, Optional
 
 from app.common.form import BaseUserForm
 from app.common.form.form_validators import Password

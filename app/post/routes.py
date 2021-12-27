@@ -1,10 +1,6 @@
-from flask import Blueprint
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import url_for
-from flask_login import current_user
-from flask_login import login_required
+from flask import Blueprint, current_app, redirect, \
+                render_template, request, url_for
+from flask_login import current_user, login_required
 
 from app.common.decorators import check_confirmed
 from .form import CommentForm
@@ -31,6 +27,12 @@ def show_post(uuid, slug):
             slug=post.title_slug
         ))
     return render_template('show_post.html', form=form, post=post)
+
+@bp.route('/article/all')
+def show_posts():
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.id.desc()).paginate(page, current_app.config['POST_PER_PAGE'])
+    return render_template('show_all_posts.html', posts=posts)
 
 @bp.route('/like/<uuid>/<action>', methods=['GET'])
 @login_required

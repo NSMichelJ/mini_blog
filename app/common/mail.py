@@ -22,7 +22,7 @@ def send_mail(subject, recipients, sender, body, html):
 
     :param recipients:
         Lista de receptores
-    
+
     :param sender:
         Email de remitente
 
@@ -41,5 +41,5 @@ def send_mail(subject, recipients, sender, body, html):
     msg.body = body
     msg.html = html
     app = current_app._get_current_object()
-    Thread(target=_send_async_email, args=(app, msg)).start()
-
+    t = Thread(target=_send_async_email, args=(app, msg))
+    t.start()

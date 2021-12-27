@@ -1,16 +1,70 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <title>Por favor, confirme su email</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .wrapper {
+            font-family: Arial, Helvetica, sans-serif;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid #d8d8d8;
+            border-radius: 10px;
+            margin: 100px auto;
+            padding: 20px;
+        }
+
+        .wrapper h1 {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .wrapper p {
+            text-align: justify;
+            line-height: 25px;
+            margin: 20px 0;
+        }
+
+        .wrapper div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .wrapper div button {
+            display: block;
+            margin: 10px;
+            padding: 10px;
+            background: #28a745;
+            color: #ffffff;
+            font-size: 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
+
 <body>
-   <h1>Gracias por su registro en el Miniblog</h1>
-   <P>Por favor presione el boton para confirmar su email</P>
-   <form action="{{ url }}" method="get">
-       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-       <button>Confirm Email</button>
-   </form>
-   <p>O siga el siguiente enlace.<a href="{{ url }}">{{ url }}</a></p>
-    <p><strong>Si tu no usas este enlace en 1 hora expirara</strong></p>
+    <div class="wrapper">
+        <h1>Gracias por registrarte en el MiniBlog</h1>
+        <P>El siguiente paso para escribir publicaciones asombrosas en el MiniBlog es confirmar su cuenta. Pero no se preocupe usted puede usar el siguiente botón para confirmar su cuenta.</P>
+        <div>
+            <form action="{{ url }}" method="get">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button>Confirm Email</button>
+            </form>
+        </div>
+        <p>O haga click en el enlace. <a href="{{ url }}">confirm email</a>, y listo!</p>
+        <p><strong>Si tu no usas este enlace en 1 hora expirara.</strong></p>
+    </div>
 </body>
+
 </html>

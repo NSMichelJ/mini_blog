@@ -23,7 +23,8 @@ def strftime_filter(datetime, format=None):
     elif format == 'standard':
         formatted = datetime.strftime(standard_format)
     elif format == 'full':
-        formatted = datetime.strftime(f'{weekdays[datetime.weekday()]}, %d de {months[datetime.month-1]} de %Y')
+        formatted = datetime.strftime(
+            f'{weekdays[datetime.weekday()]}, %d de {months[datetime.month-1]} de %Y')
     else:
         formatted = datetime.strftime(standard_format)
     return formatted
@@ -41,7 +42,7 @@ def pluralize_filter(data, word, other_word = None):
     :param new_word:
         palabra que reemplaza a word en caso de ser plural
     """
-    
+
     new_word = ''
     try:
         if data.__len__() > 1:
@@ -59,5 +60,5 @@ def pluralize_filter(data, word, other_word = None):
                 new_word = f'{data} {other_word}'
         else:
             new_word = word
-            
+
     return new_word

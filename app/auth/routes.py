@@ -1,23 +1,14 @@
 from datetime import datetime
 
-from flask import Blueprint
-from flask import flash
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import url_for
-from flask import current_app
-from flask_login import login_user
-from flask_login import current_user
-from flask_login import logout_user
-from flask_login import login_required
+from flask import Blueprint, current_app, flash, redirect, \
+                render_template, request, url_for
+from flask_login import current_user, login_user, \
+                login_required, logout_user
 from werkzeug.urls import url_parse
 
 from app.common.mail import send_mail
 from app.common.utils import encode_token, decode_token, save_image
-from .forms import LoginForm
-from .forms import SignupForm
-from .forms import ResetPasswordForm
+from .forms import LoginForm, SignupForm, ResetPasswordForm
 from .decorators import if_user_authenticated_redirect
 from .models import User
 
@@ -27,7 +18,7 @@ bp = Blueprint('auth', __name__, template_folder='templates')
 @if_user_authenticated_redirect('dashboard.dashboard')
 def login():
     form = LoginForm()
-    
+
     if request.method == 'POST':
         username = form.username.data
         password = form.password.data

@@ -4,13 +4,10 @@ from datetime import datetime
 
 from flask import current_app, url_for
 from flask_login import UserMixin
-from flask_sqlalchemy import SQLAlchemy
 from PIL import Image
-from werkzeug.security import check_password_hash
-from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
-from app.ext import db
-from app.ext import login_manager
+from app.ext import db, login_manager
 from app.post.models import PostLike
 
 followers = db.Table('followers',
@@ -30,7 +27,10 @@ class User(db.Model, UserMixin):
     background_image_name = db.Column(db.String)
     profile_image_name = db.Column(db.String, default='')
     profile_thumbnail = db.Column(db.Boolean, default=False)
-    posts = db.relationship('Post', backref='author', lazy=True, cascade="all, delete")
+    posts = db.relationship('Post',
+        backref='author', lazy=True,
+        cascade="all, delete", order_by='desc(Post.id)'
+    )
     comment = db.relationship('Comment', backref='author', lazy=True, cascade="all, delete")
     confirmed = db.Column(db.Boolean, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
@@ -49,9 +49,9 @@ class User(db.Model, UserMixin):
     def __init__(self, username, first_name, last_name, email):
         self.username = username
         self.first_name = first_name
-        self.last_name = last_name 
+        self.last_name = last_name
         self.email = email
-    
+
     def __str__(self):
         return f'{self.username}'
 
@@ -68,7 +68,7 @@ class User(db.Model, UserMixin):
 
     def is_admin(self):
         return self.admin
-    
+
     def create_admin(self):
         self.admin = True
 
@@ -111,7 +111,10 @@ class User(db.Model, UserMixin):
 
             with Image.open(pathname) as img:
                 img.resize((250, 250))
-                outfile = join(current_app.config['MEDIA_PROFILE_THUMBNAIL_DIR'], self.profile_image_name)
+                outfile = join(
+                    current_app.config['MEDIA_PROFILE_THUMBNAIL_DIR'],
+                    self.profile_image_name
+                )
                 img.save(outfile, "JPEG")
 
             self.profile_thumbnail = True
@@ -126,9 +129,9 @@ class User(db.Model, UserMixin):
             return ''
 
     def get_background(self):
-        if self.background_image_name != None:
+        if self.background_image_name is not None:
             url = url_for('public.show_background_image', filename=self.background_image_name)
-            return url 
+            return url
         else:
             return ''
 

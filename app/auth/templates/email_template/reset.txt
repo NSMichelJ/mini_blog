@@ -1,2 +1,5 @@
-Olvido su contraseña?
-Si usted a perdido su contraseña siga el enlace {{ url }} para restablecer su contraseña.
+MiniBlog password reset
+Oímos que usted perdió su contraseña. Pero no se preocupe usted puede usar el siguiente enlace.
+{{ url }}
+para restablecer su contraseña.
+Si tu no usas este enlace en 1 hora expirara

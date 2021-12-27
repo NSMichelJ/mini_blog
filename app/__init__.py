@@ -1,5 +1,6 @@
 from decouple import config
-from flask import Flask
+
+from flask import Flask, render_template
 
 from app.admin.routes import bp as admin_bp
 from app.auth.routes import bp as auth_bp
@@ -19,12 +20,14 @@ def create_app():
     app.config.from_object(settings_module)
 
     register_filter(app)
+    register_error_handlers(app)
 
     app.register_blueprint(public_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(dash_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(post_bp)
+
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -37,6 +40,20 @@ def create_app():
     mail.init_app(app)
 
     return app
+
+def register_error_handlers(app):
+
+    @app.errorhandler(500)
+    def base_error_handler(e):
+        return render_template('500.html', statuscode=500), 500
+
+    @app.errorhandler(404)
+    def error_404_handler(e):
+        return render_template('404.html', statuscode=404), 404
+
+    @app.errorhandler(401)
+    def error_404_handler(e):
+        return render_template('401.html', statuscode=401), 401
 
 def register_filter(app):
     """
