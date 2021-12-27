@@ -27,3 +27,37 @@ def strftime_filter(datetime, format=None):
     else:
         formatted = datetime.strftime(standard_format)
     return formatted
+
+def pluralize_filter(data, word, other_word = None):
+    """
+    Agrega el plural al la palabra
+
+    :param data:
+        un tipo de dato, numérico o de tipo lista
+
+    :param word:
+        palabra a pluralizar
+
+    :param new_word:
+        palabra que reemplaza a word en caso de ser plural
+    """
+    
+    new_word = ''
+    try:
+        if data.__len__() > 1:
+            if other_word is None:
+                new_word = f'{data.__len__()} {word}s'
+            else:
+                new_word = f'{data.__len__()} {other_word}'
+        else:
+            new_word = word
+    except AttributeError:
+        if data > 1:
+            if other_word is None:
+                new_word = f'{data} {word}s'
+            else:
+                new_word = f'{data} {other_word}'
+        else:
+            new_word = word
+            
+    return new_word

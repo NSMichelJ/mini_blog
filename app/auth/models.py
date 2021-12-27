@@ -1,7 +1,11 @@
+from os import makedirs
+from os.path import join
 from datetime import datetime
 
+from flask import current_app, url_for
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from PIL import Image
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
@@ -23,6 +27,9 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
     admin = db.Column(db.Boolean, default=False)
+    background_image_name = db.Column(db.String)
+    profile_image_name = db.Column(db.String, default='')
+    profile_thumbnail = db.Column(db.Boolean, default=False)
     posts = db.relationship('Post', backref='author', lazy=True, cascade="all, delete")
     comment = db.relationship('Comment', backref='author', lazy=True, cascade="all, delete")
     confirmed = db.Column(db.Boolean, default=False)
@@ -92,6 +99,38 @@ class User(db.Model, UserMixin):
         return PostLike.query.filter(
             PostLike.user_id == self.id,
             PostLike.post_id == post.id).count() > 0
+
+    def get_thumbnail(self):
+        if self.profile_image_name and not self.profile_thumbnail:
+            pathname = join(
+                current_app.config['MEDIA_PROFILE_DIR'],
+                self.profile_image_name
+            )
+
+            makedirs(current_app.config['MEDIA_PROFILE_THUMBNAIL_DIR'], exist_ok=True)
+
+            with Image.open(pathname) as img:
+                img.resize((250, 250))
+                outfile = join(current_app.config['MEDIA_PROFILE_THUMBNAIL_DIR'], self.profile_image_name)
+                img.save(outfile, "JPEG")
+
+            self.profile_thumbnail = True
+            self.save()
+
+            return url_for('public.show_profile_thumbnail', filename=self.profile_image_name)
+
+        elif self.profile_image_name:
+            return url_for('public.show_profile_thumbnail', filename=self.profile_image_name)
+
+        else:
+            return ''
+
+    def get_background(self):
+        if self.background_image_name != None:
+            url = url_for('public.show_background_image', filename=self.background_image_name)
+            return url 
+        else:
+            return ''
 
 @login_manager.user_loader
 def load_user(id):

@@ -7,9 +7,9 @@
     <h1 class="display-5 fw-bold">Editar perfil</h1>
 </div>
 
-<div class="card mt-5 auth-form">
+<div class="card my-5 auth-form">
     <div class="card-body">
-        <form method="post" autocomplete="off">
+        <form method="post" autocomplete="off" enctype="multipart/form-data">
             {% from '_formhelper.html' import render_field %}
 
             {{ form.csrf_token }}
@@ -22,11 +22,15 @@
 
             {{ render_field(form.email) }}
 
+            {{ render_field(form.profile_image) }}
+
+            {{ render_field(form.background_image)}}
+
             {{ render_field(form.password) }}
 
             {{ render_field(form.confirm_password) }}
 
-            <button type="submit" class="btn btn-primary">Signup</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         </form>
     </div>
 

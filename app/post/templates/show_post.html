@@ -20,7 +20,7 @@
             <div class="card mt-5">
                 <div class="card-body">
                     <h5 class="card-title">{{ post.likes.count() }} like</h5>
-                    {% if current_user.is_autenticated%}
+                    {% if current_user.is_authenticated and current_user.confirmed %}
                     <p class="card-text">Apoya a {{ post.author.username }} con tu like
                         {% if current_user.has_liked_post(post) %}
                         <a href="{{ url_for('post.like_action', uuid=post.public_id, action='unlike') }}">Unlike</a>
@@ -30,9 +30,9 @@
 
                         <a href="{{ url_for('post.like_action', uuid=post.public_id, action='like') }}">Like</a>
                     </p>
-                    {% endif %}
+                        {% endif %}
                     {% else %}
-                    <p class="card-text">Recuerda iniciar sección para dar like</p>
+                    <p class="card-text">Recuerda iniciar sección y comfirmar tu email para dar like</p>
                     {% endif %}
                 </div>
             </div>
@@ -40,7 +40,7 @@
 
             <div class="mt-3 p-3">
                 {% if post.comments != [] %}
-                <p class="h3 mb-3">Comentarios:</p>
+                <p class="h3 mb-3">{{ post.comments|pluralize('Comentario') }}:</p>
                 <div>
                     {% for comment in post.comments%}
                     <div class="border-bottom mb-3">
@@ -49,8 +49,6 @@
                         </p>
                         <p>{{ comment.content }}</p>
                         <p>El {{ comment.created|strftime }}</p>
-
-
                     </div>
                     {% endfor %}
                 </div>
@@ -70,7 +68,7 @@
                     </div>
                 </form>
                 {% else %}
-                <h1>Recuerda iniciar sección para comentar</h1>
+                <p class="h3">Recuerda iniciar sección y confirmar tu email para comentar</p>
                 {% endif %}
             </div>
         </div>

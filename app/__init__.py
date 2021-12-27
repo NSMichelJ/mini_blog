@@ -3,7 +3,7 @@ from flask import Flask
 
 from app.admin.routes import bp as admin_bp
 from app.auth.routes import bp as auth_bp
-from app.common.filters import strftime_filter
+from app.common.filters import strftime_filter, pluralize_filter
 from app.dashboard.routes import bp as dash_bp
 from app.ext import *
 from app.post.routes import bp as post_bp
@@ -46,3 +46,4 @@ def register_filter(app):
         instancia de la app Flask
     """
     app.jinja_env.filters['strftime'] = strftime_filter
+    app.jinja_env.filters['pluralize'] = pluralize_filter

@@ -16,7 +16,7 @@ from app.post.models import Post
 from .forms import WritePostForm
 from .forms import EditProfileForm
 from app.common.decorators import check_confirmed
-from app.common.utils import encode_token
+from app.common.utils import encode_token, save_image
 from app.common.mail import send_mail
 
 bp = Blueprint('dashboard', __name__, template_folder='templates')
@@ -37,6 +37,21 @@ def edit_profile():
             current_user.username = form.username.data
             current_user.first_name = form.first_name.data
             current_user.last_name = form.last_name.data
+
+            if form.profile_image.data:
+                print('XD 1')
+                current_user.profile_image_name = save_image(
+                    form.profile_image.data,
+                    current_app.config['MEDIA_PROFILE_DIR']
+                )
+                current_user.profile_thumbnail = False
+
+            if form.background_image.data:
+                print('XD 2')
+                current_user.background_image_name = save_image(
+                    form.background_image.data,
+                    current_app.config['MEDIA_BACKGROUND_DIR']
+                )
 
             if form.password.data != '':
                 current_user.created_password(form.password.data)

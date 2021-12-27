@@ -3,7 +3,7 @@
 {% block title %}@{{ user.username}}{% endblock %}
 
 {% block content %}
-<div class="container db-social" style="background: url();">
+<div class="container db-social mt-5" style="background: url('{{ user.get_background() }}');">
     <div class="jumbotron jumbotron-fluid"></div>
     <div class="container-fluid">
         <div class="row justify-content-center">
@@ -26,8 +26,8 @@
 
                             <div class="col-xl-6 col-md-6 d-flex justify-content-center">
                                 <div class="image-default">
-                                    <img class="rounded-circle" src=""
-                                        alt="">
+                                    <a href="{{ url_for('public.show_profile_image', filename=user.profile_image_name) }}"><img class="rounded-circle" src="{{ user.get_thumbnail() }}"
+                                        alt=""></a>
                                 </div>
                                 <div class="infos">
                                     <h2>@{{ user.username}}</h2>
@@ -62,7 +62,7 @@
 </div>
 {% endif %}
 
-{% if user.post != [] %}
+{% if user.posts != [] %}
 <p class="h5">Publicaciones por {{user.username}}</p>
 <ul class="list-group list-group-flush">
     {% for post in user.posts%}

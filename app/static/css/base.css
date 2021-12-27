@@ -11,6 +11,7 @@
 
 .db-social .jumbotron {
     margin: 0;
+    background: rgba(52,40,104,.08);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;

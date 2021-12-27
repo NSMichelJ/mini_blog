@@ -3,9 +3,9 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="card mt-5 auth-form">
+<div class="card my-5 auth-form">
     <div class="card-body">
-        <form method="post" autocomplete="off">
+        <form method="post" autocomplete="off" enctype="multipart/form-data">
             {% from '_formhelper.html' import render_field %}
 
             {{ form.csrf_token }}
@@ -17,6 +17,10 @@
             {{ render_field(form.last_name) }}
 
             {{ render_field(form.email) }}
+
+            {{ render_field(form.profile_image) }}
+
+            {{ render_field(form.background_image)}}
 
             {{ render_field(form.password) }}
 

@@ -14,7 +14,7 @@ from flask_login import login_required
 from werkzeug.urls import url_parse
 
 from app.common.mail import send_mail
-from app.common.utils import encode_token, decode_token
+from app.common.utils import encode_token, decode_token, save_image
 from .forms import LoginForm
 from .forms import SignupForm
 from .forms import ResetPasswordForm
@@ -62,6 +62,19 @@ def signup():
             )
 
             user.created_password(form.password.data)
+
+            if form.profile_image.data:
+                user.profile_image_name = save_image(
+                    form.profile_image.data,
+                    current_app.config['MEDIA_PROFILE_DIR']
+                )
+
+            if form.background_image.data:
+                user.background_image_name = save_image(
+                    form.background_image.data,
+                    current_app.config['MEDIA_BACKGROUND_DIR']
+                )
+
             user.save()
 
             login_user(user)
@@ -147,7 +160,6 @@ def reset_password():
             url = url_for('auth.reset_with_token', token=token, _external=True)
             body = render_template('email_template/reset.txt', url=url)
             html = render_template('email_template/reset.html', url=url)
-            print(html)
             send_mail(
                 'Restablezca su contraseña',
                 recipients=[email],

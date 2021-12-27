@@ -1,6 +1,7 @@
 """
 Configuración por defecto de la app
 """
+from os.path import abspath, dirname, join 
 
 from decouple import config
 
@@ -20,3 +21,10 @@ MAIL_USE_SSL = config('MAIL_USE_SSL', default=False, cast=bool)
 MAIL_USERNAME = config('MAIL_USERNAME', cast=str)
 MAIL_PASSWORD = config('MAIL_PASSWORD', cast=str)
 MAIL_DEFAULT_SENDER = MAIL_USERNAME
+
+BASE_DIR = dirname(dirname(abspath(__file__)))
+MEDIA_DIR = join(BASE_DIR, 'media')
+
+MEDIA_BACKGROUND_DIR = join(MEDIA_DIR, 'image/background')
+MEDIA_PROFILE_DIR = join(MEDIA_DIR, 'image/profile')
+MEDIA_PROFILE_THUMBNAIL_DIR = join(MEDIA_PROFILE_DIR, 'thumbnail')
